@@ -3,6 +3,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Todo from "@/Components/Todo";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -21,8 +22,9 @@ export default function Home() {
     e.preventDefault();
     try {
       //api code
+      const response = await axios.post("/api", formData);
 
-      toast.success("Success");
+      toast.success(response.data.msg);
     } catch (error) {
       toast.error("Error");
     }
