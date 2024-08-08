@@ -34,7 +34,7 @@ const Todo = ({
         ) : (
           <button
             onClick={() => completeTodo(mongoId)}
-            className="py-2 px-4 bg-green-500 text-white"
+            className="py-2 px-4 bg-black text-white"
           >
             Done
           </button>
