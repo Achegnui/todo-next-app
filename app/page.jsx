@@ -2,7 +2,7 @@
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Todo from "@/Components/Todo";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function Home() {
@@ -10,6 +10,17 @@ export default function Home() {
     title: "",
     description: "",
   });
+
+  const [todoData, setTodoData] = useState([]);
+
+  const fetchTodos = async () => {
+    const response = await axios("/api");
+    setTodoData(response.data.todos);
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   const onChangeHandler = (e) => {
     const name = e.target.name;
@@ -25,6 +36,7 @@ export default function Home() {
       const response = await axios.post("/api", formData);
 
       toast.success(response.data.msg);
+      setFormData({ title: "", description: "" });
     } catch (error) {
       toast.error("Error");
     }
@@ -79,9 +91,19 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            <Todo />
-            <Todo />
-            <Todo />
+            {todoData.map((item, index) => {
+              return (
+                <Todo
+                  key={index}
+                  id={index}
+                  title={item.title}
+                  description={item.description}
+                  complete={item.isCompleted}
+                  mongoId={item._id}
+                  fetchTodos={fetchTodos}
+                />
+              );
+            })}
           </tbody>
         </table>
       </div>
